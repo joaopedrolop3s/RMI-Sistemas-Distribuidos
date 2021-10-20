@@ -1,0 +1,32 @@
+version: '3.3'
+
+services:
+
+  rmi-server:
+    build: .
+    <<: &default
+      image: ubuntu/java
+    container_name: rmi-server
+    networks:
+      - default-network
+    volumes:
+      - ./server:/home/RMI/server
+    expose:
+      - "1099"
+    stdin_open: true
+    tty: true
+
+  rmi-client:
+    <<: *default
+    container_name: rmi-client
+    networks:
+      - default-network
+    depends_on:
+      - rmi-server
+    volumes:
+      - ./client:/home/RMI/client
+    stdin_open: true
+    tty: true
+
+networks:
+  default-network:
